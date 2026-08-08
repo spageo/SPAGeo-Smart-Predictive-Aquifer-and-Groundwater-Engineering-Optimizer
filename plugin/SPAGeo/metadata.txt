@@ -1,0 +1,11 @@
+[general]
+name=SPAGeo
+description=Smart Predictive Aquifer and Groundwater Engineering Optimizer
+version=0.1.0
+qgisMinimumVersion=3.44
+author=SPAGeo
+email=alok@spageo.co.in
+about=SPAGeo is a GeoAI platform for predictive aquifer and groundwater engineering.
+category=Plugins
+experimental=True
+deprecated=False
