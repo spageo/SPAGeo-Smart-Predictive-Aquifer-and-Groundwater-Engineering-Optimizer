@@ -4,9 +4,11 @@ from qgis.PyQt.QtWidgets import (
     QLabel,
     QPushButton,
     QFrame,
+    QTabWidget,
+    QWidget,
 )
-
 from qgis.PyQt.QtCore import Qt
+
 
 class SPAGeoMainDialog(QDialog):
     """Main SPAGeo user interface."""
@@ -15,20 +17,24 @@ class SPAGeoMainDialog(QDialog):
         super().__init__(parent)
 
         self.setWindowTitle(
-            "SPAGeo — Smart Predictive Aquifer & Groundwater Engineering Optimizer"
+            "SPAGeo — Smart Predictive Aquifer & Groundwater "
+            "Engineering Optimizer"
         )
 
-        self.setMinimumSize(700, 500)
+        self.setMinimumSize(900, 600)
 
         self._build_ui()
 
     def _build_ui(self):
-        """Build the initial SPAGeo main interface."""
+        """Build the main SPAGeo workspace."""
 
         layout = QVBoxLayout()
         self.setLayout(layout)
 
-        # Title
+        # ---------------------------------------------------------
+        # Header
+        # ---------------------------------------------------------
+
         title = QLabel("SPAGeo")
         title.setAlignment(Qt.AlignCenter)
         title.setStyleSheet(
@@ -37,7 +43,6 @@ class SPAGeoMainDialog(QDialog):
 
         layout.addWidget(title)
 
-        # Subtitle
         subtitle = QLabel(
             "Smart Predictive Aquifer & Groundwater "
             "Engineering Optimizer"
@@ -46,30 +51,93 @@ class SPAGeoMainDialog(QDialog):
 
         layout.addWidget(subtitle)
 
+        # ---------------------------------------------------------
         # Separator
+        # ---------------------------------------------------------
+
         separator = QFrame()
         separator.setFrameShape(QFrame.HLine)
         separator.setFrameShadow(QFrame.Sunken)
 
         layout.addWidget(separator)
 
-        # Initial workspace message
-        workspace = QLabel(
-            "SPAGeo Workspace\n\n"
-            "This is the initial main interface.\n\n"
-            "Future workflow components will be integrated here:\n"
-            "• Data & GIS\n"
-            "• Model Configuration\n"
-            "• Simulation\n"
-            "• Results & Visualization\n"
-            "• AI Copilot"
+        # ---------------------------------------------------------
+        # Main workflow tabs
+        # ---------------------------------------------------------
+
+        self.tabs = QTabWidget()
+
+        # Data & GIS
+        data_tab = self._create_placeholder_tab(
+            "Data & GIS",
+            "Data import, GIS layers, preprocessing, "
+            "and groundwater data management will be integrated here."
         )
 
-        workspace.setAlignment(Qt.AlignCenter)
-        layout.addWidget(workspace)
+        # Model Configuration
+        model_tab = self._create_placeholder_tab(
+            "Model Configuration",
+            "Groundwater model configuration will be integrated here."
+        )
 
+        # Simulation
+        simulation_tab = self._create_placeholder_tab(
+            "Simulation",
+            "Simulation controls and model execution "
+            "will be integrated here."
+        )
+
+        # Results & Visualization
+        results_tab = self._create_placeholder_tab(
+            "Results & Visualization",
+            "Simulation results, analysis, maps, charts, "
+            "and visualization will be integrated here."
+        )
+
+        # AI Assistant
+        ai_tab = self._create_placeholder_tab(
+            "AI Assistant",
+            "The SPAGeo AI Assistant / Copilot will be "
+            "integrated here in a later development phase."
+        )
+
+        self.tabs.addTab(data_tab, "Data & GIS")
+        self.tabs.addTab(model_tab, "Model Configuration")
+        self.tabs.addTab(simulation_tab, "Simulation")
+        self.tabs.addTab(results_tab, "Results & Visualization")
+        self.tabs.addTab(ai_tab, "AI Assistant")
+
+        layout.addWidget(self.tabs)
+
+        # ---------------------------------------------------------
         # Close button
+        # ---------------------------------------------------------
+
         close_button = QPushButton("Close")
         close_button.clicked.connect(self.close)
 
         layout.addWidget(close_button)
+
+    def _create_placeholder_tab(self, title, description):
+        """Create a temporary placeholder for a workflow component."""
+
+        tab = QWidget()
+        tab_layout = QVBoxLayout()
+        tab.setLayout(tab_layout)
+
+        heading = QLabel(title)
+        heading.setAlignment(Qt.AlignCenter)
+        heading.setStyleSheet(
+            "font-size: 18px; font-weight: bold;"
+        )
+
+        description_label = QLabel(description)
+        description_label.setAlignment(Qt.AlignCenter)
+        description_label.setWordWrap(True)
+
+        tab_layout.addStretch()
+        tab_layout.addWidget(heading)
+        tab_layout.addWidget(description_label)
+        tab_layout.addStretch()
+
+        return tab
