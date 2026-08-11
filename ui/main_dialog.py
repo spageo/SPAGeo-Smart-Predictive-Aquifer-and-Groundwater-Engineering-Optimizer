@@ -29,6 +29,10 @@ class SPAGeoMainDialog(QDialog):
 
         self._build_ui()
 
+        self.model_created.connect(self._on_model_created)
+        self.simulation_started.connect(self._on_simulation_started)
+        self.simulation_completed.connect(self._on_simulation_completed)
+
     def _build_ui(self):
         """Build the main SPAGeo workspace."""
 
