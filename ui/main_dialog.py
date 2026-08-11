@@ -7,11 +7,15 @@ from qgis.PyQt.QtWidgets import (
     QTabWidget,
     QWidget,
 )
-from qgis.PyQt.QtCore import Qt
+from qgis.PyQt.QtCore import Qt, pyqtSignal
 
 
 class SPAGeoMainDialog(QDialog):
     """Main SPAGeo user interface."""
+
+    model_created = pyqtSignal()
+    simulation_started = pyqtSignal()
+    simulation_completed = pyqtSignal()
 
     def __init__(self, parent=None):
         super().__init__(parent)
