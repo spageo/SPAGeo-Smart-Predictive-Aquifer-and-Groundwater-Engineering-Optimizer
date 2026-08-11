@@ -145,3 +145,16 @@ class SPAGeoMainDialog(QDialog):
         tab_layout.addStretch()
 
         return tab
+
+
+    def _on_model_created(self):
+        """Handle model-created event."""
+        pass
+
+    def _on_simulation_started(self):
+        """Handle simulation-started event."""
+        pass
+
+    def _on_simulation_completed(self):
+        """Handle simulation-completed event."""
+        pass
