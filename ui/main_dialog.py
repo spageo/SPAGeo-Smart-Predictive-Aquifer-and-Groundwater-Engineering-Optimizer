@@ -179,3 +179,7 @@ class SPAGeoMainDialog(QDialog):
     def set_copilot_dock(self, component):
         """Attach the AI Copilot component."""
         self.copilot_dock = component
+
+    def set_data_gis(self, component):
+        """Attach the Data & GIS component."""
+        self.data_gis = component
