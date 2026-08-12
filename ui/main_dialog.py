@@ -33,6 +33,7 @@ class SPAGeoMainDialog(QDialog):
         self.model_config = None
         self.results_viewer = None
         self.copilot_dock = None
+        self.data_gis = None
 
         self.model_created.connect(self._on_model_created)
         self.simulation_started.connect(self._on_simulation_started)
