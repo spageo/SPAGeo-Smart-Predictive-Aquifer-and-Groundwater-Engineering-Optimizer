@@ -167,3 +167,14 @@ class SPAGeoMainDialog(QDialog):
     def _on_simulation_completed(self):
         """Handle simulation-completed event."""
         pass
+    def set_model_config(self, component):
+        """Attach the model configuration component."""
+        self.model_config = component
+
+    def set_results_viewer(self, component):
+        """Attach the results viewer component."""
+        self.results_viewer = component
+
+    def set_copilot_dock(self, component):
+        """Attach the AI Copilot component."""
+        self.copilot_dock = component
