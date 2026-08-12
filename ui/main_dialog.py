@@ -29,6 +29,11 @@ class SPAGeoMainDialog(QDialog):
 
         self._build_ui()
 
+        # Future component attachment points
+        self.model_config = None
+        self.results_viewer = None
+        self.copilot_dock = None
+
         self.model_created.connect(self._on_model_created)
         self.simulation_started.connect(self._on_simulation_started)
         self.simulation_completed.connect(self._on_simulation_completed)
