@@ -1,6 +1,8 @@
+import os
 import sys
 from pathlib import Path
 
+from qgis.PyQt.QtCore import QSettings
 from qgis.PyQt.QtWidgets import QAction
 
 # Add the SPAGeo project root to Python's import path.
@@ -16,10 +18,25 @@ class SPAGeoPlugin:
 
     def __init__(self, iface):
         self.iface = iface
+
+        self.plugin_dir = os.path.dirname(__file__)
+        self.settings = QSettings()
+        self.actions = []
+        self.menu = "SPAGeo"
+        self.toolbar = None
+
         self.action = None
         self.main_dialog = None
 
+        self.model_config = None
+        self.results_viewer = None
+        self.data_gis = None
+        self.copilot_dock = None
+
     def initGui(self):
+        self.toolbar = self.iface.addToolBar("SPAGeo")
+        self.toolbar.setObjectName("SPAGeoToolbar")
+
         self.action = QAction(
             "SPAGeo",
             self.iface.mainWindow()
@@ -28,6 +45,9 @@ class SPAGeoPlugin:
         self.action.triggered.connect(
             self.open_main_dialog
         )
+
+        self.toolbar.addAction(self.action)
+        self.actions.append(self.action)
 
         self.iface.addPluginToMenu(
             "&SPAGeo",
