@@ -1,16 +1,19 @@
-from qgis.PyQt.QtWidgets import (
-    QDialog,
-    QVBoxLayout,
-    QLabel,
-    QPushButton,
-    QFrame,
-    QTabWidget,
-    QWidget,
+import os
+
+from qgis.PyQt import uic
+from qgis.PyQt.QtCore import pyqtSignal
+from qgis.PyQt.QtWidgets import QDialog, QWidget
+
+
+FORM_CLASS, _ = uic.loadUiType(
+    os.path.join(
+        os.path.dirname(__file__),
+        "spageo_main.ui"
+    )
 )
-from qgis.PyQt.QtCore import Qt, pyqtSignal
 
 
-class SPAGeoMainDialog(QDialog):
+class SPAGeoMainDialog(QDialog, FORM_CLASS):
     """Main SPAGeo user interface."""
 
     model_created = pyqtSignal()
@@ -20,14 +23,13 @@ class SPAGeoMainDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        self.setWindowTitle(
-            "SPAGeo — Smart Predictive Aquifer & Groundwater "
-            "Engineering Optimizer"
-        )
+        self.setupUi(self)
 
-        self.setMinimumSize(900, 600)
+        # Setup tabs
+        self.setup_tabs()
 
-        self._build_ui()
+        # Connect signals
+        self.connect_signals()
 
         # Future component attachment points
         self.model_config = None
@@ -39,123 +41,46 @@ class SPAGeoMainDialog(QDialog):
         self.simulation_started.connect(self._on_simulation_started)
         self.simulation_completed.connect(self._on_simulation_completed)
 
-    def _build_ui(self):
-        """Build the main SPAGeo workspace."""
+    def setup_tabs(self):
+        """Setup main tabbed interface."""
 
-        layout = QVBoxLayout()
-        self.setLayout(layout)
+        # Tab 1: Data Preprocessing
+        self.tab_data = self.findChild(QWidget, "tab_data")
 
-        # ---------------------------------------------------------
-        # Header
-        # ---------------------------------------------------------
+        # Tab 2: Model Configuration
+        self.tab_config = self.findChild(QWidget, "tab_config")
 
-        title = QLabel("SPAGeo")
-        title.setAlignment(Qt.AlignCenter)
-        title.setStyleSheet(
-            "font-size: 24px; font-weight: bold;"
+        # Tab 3: Simulation Control
+        self.tab_simulation = self.findChild(QWidget, "tab_simulation")
+
+        # Tab 4: Results Visualization
+        self.tab_results = self.findChild(QWidget, "tab_results")
+
+        # Tab 5: AI Assistant
+        self.tab_ai = self.findChild(QWidget, "tab_ai")
+
+    def connect_signals(self):
+        """Connect UI signals."""
+
+        # Import data button
+        self.btn_import_data.clicked.connect(
+            self.import_data
         )
 
-        layout.addWidget(title)
-
-        subtitle = QLabel(
-            "Smart Predictive Aquifer & Groundwater "
-            "Engineering Optimizer"
-        )
-        subtitle.setAlignment(Qt.AlignCenter)
-
-        layout.addWidget(subtitle)
-
-        # ---------------------------------------------------------
-        # Separator
-        # ---------------------------------------------------------
-
-        separator = QFrame()
-        separator.setFrameShape(QFrame.HLine)
-        separator.setFrameShadow(QFrame.Sunken)
-
-        layout.addWidget(separator)
-
-        # ---------------------------------------------------------
-        # Main workflow tabs
-        # ---------------------------------------------------------
-
-        self.tabs = QTabWidget()
-
-        # Data & GIS
-        data_tab = self._create_placeholder_tab(
-            "Data & GIS",
-            "Data import, GIS layers, preprocessing, "
-            "and groundwater data management will be integrated here."
+        # Auto-build model button
+        self.btn_auto_build.clicked.connect(
+            self.auto_build_model
         )
 
-        # Model Configuration
-        model_tab = self._create_placeholder_tab(
-            "Model Configuration",
-            "Groundwater model configuration will be integrated here."
+        # Run simulation button
+        self.btn_run_simulation.clicked.connect(
+            self.run_simulation
         )
 
-        # Simulation
-        simulation_tab = self._create_placeholder_tab(
-            "Simulation",
-            "Simulation controls and model execution "
-            "will be integrated here."
+        # Export results button
+        self.btn_export_results.clicked.connect(
+            self.export_results
         )
-
-        # Results & Visualization
-        results_tab = self._create_placeholder_tab(
-            "Results & Visualization",
-            "Simulation results, analysis, maps, charts, "
-            "and visualization will be integrated here."
-        )
-
-        # AI Assistant
-        ai_tab = self._create_placeholder_tab(
-            "AI Assistant",
-            "The SPAGeo AI Assistant / Copilot will be "
-            "integrated here in a later development phase."
-        )
-
-        self.tabs.addTab(data_tab, "Data & GIS")
-        self.tabs.addTab(model_tab, "Model Configuration")
-        self.tabs.addTab(simulation_tab, "Simulation")
-        self.tabs.addTab(results_tab, "Results & Visualization")
-        self.tabs.addTab(ai_tab, "AI Assistant")
-
-        layout.addWidget(self.tabs)
-
-        # ---------------------------------------------------------
-        # Close button
-        # ---------------------------------------------------------
-
-        close_button = QPushButton("Close")
-        close_button.clicked.connect(self.close)
-
-        layout.addWidget(close_button)
-
-    def _create_placeholder_tab(self, title, description):
-        """Create a temporary placeholder for a workflow component."""
-
-        tab = QWidget()
-        tab_layout = QVBoxLayout()
-        tab.setLayout(tab_layout)
-
-        heading = QLabel(title)
-        heading.setAlignment(Qt.AlignCenter)
-        heading.setStyleSheet(
-            "font-size: 18px; font-weight: bold;"
-        )
-
-        description_label = QLabel(description)
-        description_label.setAlignment(Qt.AlignCenter)
-        description_label.setWordWrap(True)
-
-        tab_layout.addStretch()
-        tab_layout.addWidget(heading)
-        tab_layout.addWidget(description_label)
-        tab_layout.addStretch()
-
-        return tab
-
 
     def _on_model_created(self):
         """Handle model-created event."""
@@ -168,6 +93,27 @@ class SPAGeoMainDialog(QDialog):
     def _on_simulation_completed(self):
         """Handle simulation-completed event."""
         pass
+
+    def import_data(self):
+        """Import GIS data for modeling."""
+        # Implementation will be detailed in Phase 3
+        pass
+
+    def auto_build_model(self):
+        """Automatically build conceptual model using AI."""
+        # Implementation will be detailed in Phase 6
+        pass
+
+    def run_simulation(self):
+        """Run groundwater simulation."""
+        # Implementation will be detailed in Phase 3
+        pass
+
+    def export_results(self):
+        """Export simulation results."""
+        # Implementation will be detailed in Phase 7
+        pass
+
     def set_model_config(self, component):
         """Attach the model configuration component."""
         self.model_config = component

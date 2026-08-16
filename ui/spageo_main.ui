@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SPAGeoMainDialog</class>
+ <widget class="QDialog" name="SPAGeoMainDialog">
+  <property name="windowTitle">
+   <string>SPAGeo - Smart Predictive Aquifer &amp; Groundwater Engineering Optimizer</string>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>900</width>
+    <height>600</height>
+   </size>
+  </property>
+  <layout class="QVBoxLayout" name="mainLayout">
+   <item>
+    <widget class="QTabWidget" name="tabs">
+     <widget class="QWidget" name="tab_data">
+      <attribute name="title">
+       <string>Data Preprocessing</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="dataLayout">
+       <item>
+        <widget class="QPushButton" name="btn_import_data">
+         <property name="text">
+          <string>Import Data</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_config">
+      <attribute name="title">
+       <string>Model Configuration</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="configLayout">
+       <item>
+        <widget class="QPushButton" name="btn_auto_build">
+         <property name="text">
+          <string>Auto Build Model</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_simulation">
+      <attribute name="title">
+       <string>Simulation Control</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="simulationLayout">
+       <item>
+        <widget class="QPushButton" name="btn_run_simulation">
+         <property name="text">
+          <string>Run Simulation</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_results">
+      <attribute name="title">
+       <string>Results Visualization</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="resultsLayout">
+       <item>
+        <widget class="QPushButton" name="btn_export_results">
+         <property name="text">
+          <string>Export Results</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_ai">
+      <attribute name="title">
+       <string>AI Assistant</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="aiLayout"/>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
