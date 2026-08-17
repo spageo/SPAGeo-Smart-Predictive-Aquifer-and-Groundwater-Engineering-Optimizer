@@ -20,8 +20,20 @@ class SPAGeoMainDialog(QDialog, FORM_CLASS):
     simulation_started = pyqtSignal()
     simulation_completed = pyqtSignal()
 
-    def __init__(self, parent=None):
+    def __init__(
+        self,
+        iface=None,
+        agent=None,
+        model_engine=None,
+        cloud_manager=None,
+        parent=None
+    ):
         super().__init__(parent)
+
+        self.iface = iface
+        self.agent = agent
+        self.model_engine = model_engine
+        self.cloud_manager = cloud_manager
 
         self.setupUi(self)
 
