@@ -16,9 +16,9 @@ FORM_CLASS, _ = uic.loadUiType(
 class SPAGeoMainDialog(QDialog, FORM_CLASS):
     """Main SPAGeo user interface."""
 
-    model_created = pyqtSignal()
-    simulation_started = pyqtSignal()
-    simulation_completed = pyqtSignal()
+    model_created = pyqtSignal(object)
+    simulation_started = pyqtSignal(object)
+    simulation_completed = pyqtSignal(object)
 
     def __init__(
         self,
