@@ -112,15 +112,25 @@ class SPAGeoPlugin:
         self.copilot_dock.raise_()
 
     def unload(self):
-        if self.action:
+        """Unload SPAGeo plugin."""
+
+        # Remove toolbar
+        if self.toolbar:
+            del self.toolbar
+
+        # Remove actions
+        for action in self.actions:
             self.iface.removePluginMenu(
                 "&SPAGeo",
-                self.action
+                action
             )
+            self.iface.removeToolBarIcon(action)
+        # Close dialogs
+        if self.main_dialog:
+            self.main_dialog.close()
 
-            self.iface.removeToolBarIcon(
-                self.action
-            )
+        if self.copilot_dock:
+            self.copilot_dock.close()
 
     def open_main_dialog(self):
         if self.main_dialog is None:
