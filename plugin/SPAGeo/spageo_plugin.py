@@ -4,6 +4,7 @@ from pathlib import Path
 
 from qgis.PyQt.QtCore import QSettings, Qt
 from qgis.PyQt.QtWidgets import QAction
+from qgis.core import QgsMessageLog
 
 # Add the SPAGeo project root to Python's import path.
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -89,6 +90,11 @@ class SPAGeoPlugin:
 
     # Initialize core component placeholders
         self.initialize_core()
+
+        QgsMessageLog.logMessage(
+            "SPAGeo plugin initialized",
+            "SPAGeo"
+        )
 
     def initialize_core(self):
         """Initialize core SPAGeo component placeholders."""
