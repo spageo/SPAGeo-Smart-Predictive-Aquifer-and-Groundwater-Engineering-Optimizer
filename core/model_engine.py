@@ -2,6 +2,7 @@
 
 import os
 import tempfile
+import numpy as np
 from typing import Dict
 
 import flopy
@@ -135,6 +136,12 @@ class ModelEngine:
 
         return self._load_results()
 
+    def _run_cloud_simulation(self, time_config: Dict) -> Dict:
+        """Run simulation on cloud infrastructure."""
+        # Implementation uses CloudManager
+        # This will be detailed in Phase 5
+        pass
+
     def _configure_time_discretization(self, time_config: Dict):
         """Configure MODFLOW 6 time discretization."""
         nper = time_config["nper"]
@@ -197,3 +204,24 @@ class ModelEngine:
             "budget": budget,
             "model_workspace": self.workspace,
         }
+
+    def import_from_qgis(self, layer, field_mapping: Dict):
+        """Import QGIS layer data for model boundary conditions."""
+        pass
+
+    def export_to_qgis(self, results: Dict):
+        """Export simulation results as QGIS raster layers."""
+        layers = {}
+
+        if "heads" in results:
+            raster = self._create_result_raster(
+                     results["heads"],
+                     "Heads",
+                    )
+            layers["heads"] = raster
+
+        return layers
+
+    def _create_result_raster(self, data, name: str):
+        """Create QGIS raster from numpy array."""
+        pass
