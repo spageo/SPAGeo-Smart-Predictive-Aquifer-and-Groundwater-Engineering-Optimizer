@@ -39,10 +39,21 @@ class CloudManager:
 
     def _init_aws(self):
         """Initialize AWS resources."""
-        self.s3 = boto3.client('s3')
-        self.batch = boto3.client('batch')
-        self.sqs = boto3.client('sqs')
-        self.ecs = boto3.client('ecs')
+        self.aws_region = os.environ.get(
+            'AWS_REGION',
+            os.environ.get('AWS_DEFAULT_REGION')
+        )
+
+        if not self.aws_region:
+            raise RuntimeError(
+                "AWS region is not configured. "
+                "Set AWS_REGION or AWS_DEFAULT_REGION."
+            )
+
+        self.s3 = boto3.client('s3', region_name=self.aws_region)
+        self.batch = boto3.client('batch', region_name=self.aws_region)
+        self.sqs = boto3.client('sqs', region_name=self.aws_region)
+        self.ecs = boto3.client('ecs', region_name=self.aws_region)
 
         # Configure batch job definition
         self.job_definition = os.environ.get(
