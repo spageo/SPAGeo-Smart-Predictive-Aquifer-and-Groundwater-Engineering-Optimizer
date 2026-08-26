@@ -13,7 +13,8 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from ui.main_dialog import SPAGeoMainDialog
-from ui.copilot_dock import CopilotDockWidget
+from core.ai_agent import SPAGeoAgent
+from plugin.ui.copilot_dock import CopilotDock
 
 class SPAGeoPlugin:
 
@@ -29,7 +30,7 @@ class SPAGeoPlugin:
         self.action = None
         self.main_dialog = None
 
-        self.agent = None
+        self.agent = SPAGeoAgent(iface)
         self.model_engine = None
         self.cloud_manager = None
 
@@ -98,7 +99,7 @@ class SPAGeoPlugin:
 
     def initialize_core(self):
         """Initialize core SPAGeo component placeholders."""
-        self.agent = None
+
         self.model_engine = None
         self.cloud_manager = None
 
@@ -106,9 +107,14 @@ class SPAGeoPlugin:
         """Open the SPAGeo Copilot."""
 
         if self.copilot_dock is None:
-            self.copilot_dock = CopilotDockWidget(
-                self.iface.mainWindow()
+            if self.agent.agent is None:
+                self.agent.initialize(provider="openai")
+
+            self.copilot_dock = CopilotDock(
+                self.iface,
+                self.agent
             )
+
             self.iface.addDockWidget(
                 Qt.RightDockWidgetArea,
                 self.copilot_dock
