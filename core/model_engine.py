@@ -44,6 +44,11 @@ class ModelEngine:
         self.ims = flopy.mf6.ModflowIms(
             self.simulation,
             complexity="SIMPLE",
+            outer_maximum=100,
+            outer_dvclose=1e-4,
+            inner_maximum=100,
+            inner_dvclose=1e-4,
+            linear_acceleration="BICGSTAB",
         )
 
         self.simulation.register_ims_package(
@@ -68,6 +73,8 @@ class ModelEngine:
             ncol=grid_config["ncol"],
             delr=grid_config["cell_size_x"],
             delc=grid_config["cell_size_y"],
+            top=10.0,
+            botm=0.0,
         )
 
         return self.grid
@@ -75,12 +82,43 @@ class ModelEngine:
     def _setup_boundary_conditions(self, conditions: Dict):
         """Setup MODFLOW 6 boundary conditions."""
         if "recharge" in conditions:
+            nrow = int(self.grid.nrow.get_data())
+            ncol = int(self.grid.ncol.get_data())
+
+            recharge_data = [
+                ((0, row, col), conditions["recharge"])
+                for row in range(nrow)
+                for col in range(ncol)
+            ]
+
             self.recharge = flopy.mf6.ModflowGwfrch(
                 self.model,
                 stress_period_data={
-                    0: [
-                        ((0, 0, 0), conditions["recharge"])
-                    ]
+                    0: recharge_data
+                },
+            )
+
+            # Synthetic-model perimeter boundary:
+            # maintain the initial aquifer head at the outer cells
+            # so recharge has a physically meaningful discharge path.
+            constant_head = conditions.get("constant_head", 10.0)
+
+            chd_data = []
+
+            # Top and bottom rows.
+            for col in range(ncol):
+                chd_data.append(((0, 0, col), constant_head))
+                chd_data.append(((0, nrow - 1, col), constant_head))
+
+            # Left and right columns, excluding corners already added.
+            for row in range(1, nrow - 1):
+                chd_data.append(((0, row, 0), constant_head))
+                chd_data.append(((0, row, ncol - 1), constant_head))
+
+            self.constant_head = flopy.mf6.ModflowGwfchd(
+                self.model,
+                stress_period_data={
+                    0: chd_data
                 },
             )
 
@@ -91,7 +129,6 @@ class ModelEngine:
             )
 
         return self.recharge if "recharge" in conditions else None
-
     def _setup_aquifer_properties(self, properties: Dict):
         """Setup aquifer properties."""
         self.npf = flopy.mf6.ModflowGwfnpf(
@@ -174,8 +211,8 @@ class ModelEngine:
         """Configure MODFLOW 6 output control."""
         self.oc = flopy.mf6.ModflowGwfoc(
             self.model,
-            budget_filerecord="spageo_model.cbc",
-            head_filerecord="spageo_model.hds",
+            budget_filerecord=f"{self.model_name}.cbc",
+            head_filerecord=f"{self.model_name}.hds",
             saverecord=[("HEAD", "ALL"), ("BUDGET", "ALL")],
             printrecord=[("HEAD", "ALL"), ("BUDGET", "ALL")],
         )
